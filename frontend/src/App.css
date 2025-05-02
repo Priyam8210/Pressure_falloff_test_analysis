@@ -1,0 +1,377 @@
+/* Main App Container */
+.App {
+  text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+/* Header Styles */
+header {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+header h1 {
+  color: #2c3e50;
+  margin: 0 0 15px 0;
+  font-size: 24px;
+}
+
+h1 {
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+
+/* Controls Section */
+.controls {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.controls select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.controls select:hover {
+  border-color: #3498db;
+}
+
+/* Main Content Area */
+main {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Chart Container */
+.chart-container {
+  position: relative;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  background-color: #fff;
+  padding: 20px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  border: 1px solid #ddd;
+}
+
+/* Loading State */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  font-size: 18px;
+  color: #666;
+  animation: pulse 1.5s infinite;
+}
+
+/* Error State */
+.error {
+  padding: 20px;
+  margin: 20px 0;
+  color: #721c24;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 5px;
+}
+
+/* Slope Information */
+.slope-info {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #e9f7ef;
+  border-radius: 5px;
+  text-align: left;
+}
+
+.slope-info h3 {
+  margin-top: 0;
+  color: #2c3e50;
+}
+
+.slope-info p {
+  margin: 0;
+  color: #3498db;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* Chart Controls */
+.chart-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.chart-controls button {
+  padding: 8px 16px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.chart-controls button:hover {
+  background-color: #2980b9;
+}
+
+/* Instructions */
+.instructions {
+  text-align: left;
+  font-size: 12px;
+  color: #666;
+}
+
+.instructions p {
+  margin: 5px 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .App {
+    padding: 10px;
+  }
+
+  .chart-container {
+    height: 400px;
+    padding: 10px;
+  }
+
+  .slope-info {
+    position: static;
+    margin-top: 20px;
+  }
+
+  .instructions {
+    position: static;
+    transform: none;
+    margin-top: 20px;
+    text-align: center;
+  }
+}
+
+/* Chart Customization */
+canvas {
+  max-width: 100%;
+  height: auto !important;
+}
+
+/* Hover Effects */
+.controls select:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+/* Animation for Loading State */
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+/* New Tab Styles */
+.tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.tabs button {
+  padding: 12px 24px;
+  margin: 0 5px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-bottom: none;
+  border-radius: 5px 5px 0 0;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  color: #495057;
+  position: relative;
+  bottom: -1px;
+}
+
+.tabs button.active {
+  background-color: white;
+  border-bottom: 3px solid #3498db;
+  color: #3498db;
+}
+
+/* Diagnostic Plot Styles */
+.diagnostic-plot {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.diagnostic-plot h2 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.selection-mode {
+  background-color: #f5f5f5;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.selection-mode p {
+  margin: 0;
+  font-size: 1.1em;
+}
+
+.point-selection-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.point-inputs-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.point-input-group {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.point-input-group h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1rem;
+  color: #333;
+}
+
+.point-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.point-input {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.coord-inputs {
+  display: flex;
+  gap: 10px;
+}
+
+.coord-inputs input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.action-buttons button {
+  padding: 10px 15px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.action-buttons button:hover {
+  background-color: #45a049;
+}
+
+.action-buttons button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.action-buttons button:last-child {
+  background-color: #f44336;
+}
+
+.action-buttons button:last-child:hover {
+  background-color: #d32f2f;
+}
+
+.results-panel {
+  background-color: #e8f5e9;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+.results-panel h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #2e7d32;
+  text-align: center;
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.result-item {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+  border-left: 4px solid #4CAF50;
+}
+
+.result-label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.result-value {
+  font-size: 1.2em;
+  color: #2e7d32;
+}
+
+.diagnostic-plot h2 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
