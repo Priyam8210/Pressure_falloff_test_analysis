@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import DiagnosticScatterPlot from "../charts/DiagnosticScatterPlot";
+import SlopeLines from "../charts/SlopeLines";
 import { fetchDiagnosticData, calculateParameters } from "../../services/api";
 import {
   Chart as ChartJS,
@@ -46,6 +47,7 @@ const DiagnosticPlot = () => {
   const [calculatedParams, setCalculatedParams] = useState(null);
   const [selectionMode, setSelectionMode] = useState("stabilizationLine"); // 'stabilizationLine', 'skinPoint', 'storagePoint'
   const [debugInfo, setDebugInfo] = useState(null); // Add debug state
+  const [analysisMode, setAnalysisMode] = useState("parameters"); // 'parameters' or 'flowRegimes'
 
   // Fetch diagnostic data
   useEffect(() => {
@@ -88,7 +90,8 @@ const DiagnosticPlot = () => {
 
   // Function to handle point selection on chart
   const handlePointSelection = (event, elements) => {
-    if (!elements || elements.length === 0) return;
+    if (analysisMode !== "parameters" || !elements || elements.length === 0)
+      return;
 
     const chart = chartInstance;
     const element = elements[0];
@@ -396,7 +399,7 @@ const DiagnosticPlot = () => {
       animation: {
         duration: 0,
       },
-      onClick: handlePointSelection,
+      onClick: analysisMode === "parameters" ? handlePointSelection : undefined,
       scales: {
         x: {
           type: "logarithmic",
@@ -459,7 +462,7 @@ const DiagnosticPlot = () => {
         },
       },
     }),
-    [handlePointSelection]
+    [handlePointSelection, analysisMode]
   );
 
   // Save chart reference when it's created
@@ -485,6 +488,13 @@ const DiagnosticPlot = () => {
     }
   };
 
+  // Reset chart zoom function
+  const resetZoom = () => {
+    if (chartInstance) {
+      chartInstance.resetZoom();
+    }
+  };
+
   if (loading) return <div className="loading">Loading diagnostic data...</div>;
   if (error)
     return <div className="error">Error loading diagnostic plot: {error}</div>;
@@ -495,165 +505,208 @@ const DiagnosticPlot = () => {
     <div className="diagnostic-plot">
       <h2>Log-Log Diagnostic Plot</h2>
 
-      <div className="selection-mode">
-        <p>
-          <strong>Current Action:</strong> {getSelectionModeText()}
-        </p>
-      </div>
-
-      <div className="point-selection-controls">
-        <div className="point-inputs-container">
-          <div className="point-input-group">
-            <h3>Stabilization Line Points</h3>
-            <div className="point-inputs">
-              <div className="point-input">
-                <label>Point 1:</label>
-                <div className="coord-inputs">
-                  <input
-                    type="number"
-                    name="x2_1"
-                    value={pointInputs.x2_1}
-                    onChange={handleInputChange}
-                    placeholder="x2_1"
-                    step="any"
-                  />
-                  <input
-                    type="number"
-                    name="y2_1"
-                    value={pointInputs.y2_1}
-                    onChange={handleInputChange}
-                    placeholder="y2_1"
-                    step="any"
-                  />
-                </div>
-              </div>
-              <div className="point-input">
-                <label>Point 2:</label>
-                <div className="coord-inputs">
-                  <input
-                    type="number"
-                    name="x2_2"
-                    value={pointInputs.x2_2}
-                    onChange={handleInputChange}
-                    placeholder="x2_2"
-                    step="any"
-                  />
-                  <input
-                    type="number"
-                    name="y2_2"
-                    value={pointInputs.y2_2}
-                    onChange={handleInputChange}
-                    placeholder="y2_2"
-                    step="any"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="point-input-group">
-            <h3>Skin Factor Point</h3>
-            <div className="point-inputs">
-              <div className="point-input">
-                <label>Point:</label>
-                <div className="coord-inputs">
-                  <input
-                    type="number"
-                    name="x3"
-                    value={pointInputs.x3}
-                    onChange={handleInputChange}
-                    placeholder="x3"
-                    step="any"
-                  />
-                  <input
-                    type="number"
-                    name="y3"
-                    value={pointInputs.y3}
-                    onChange={handleInputChange}
-                    placeholder="y3"
-                    step="any"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="point-input-group">
-            <h3>Wellbore Storage Point</h3>
-            <div className="point-inputs">
-              <div className="point-input">
-                <label>Point:</label>
-                <div className="coord-inputs">
-                  <input
-                    type="number"
-                    name="x4"
-                    value={pointInputs.x4}
-                    onChange={handleInputChange}
-                    placeholder="x4"
-                    step="any"
-                  />
-                  <input
-                    type="number"
-                    name="y4"
-                    value={pointInputs.y4}
-                    onChange={handleInputChange}
-                    placeholder="y4"
-                    step="any"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="action-buttons">
+      <div className="mode-switcher">
+        <div className="tabs">
           <button
-            onClick={handleCalculateParameters}
-            disabled={selectionMode !== "complete"}
+            className={`tab-button ${
+              analysisMode === "parameters" ? "active" : ""
+            }`}
+            onClick={() => setAnalysisMode("parameters")}
           >
-            Calculate Parameters
+            Parameter Analysis
           </button>
-          <button onClick={resetSelection}>Reset Selection</button>
+          <button
+            className={`tab-button ${
+              analysisMode === "flowRegimes" ? "active" : ""
+            }`}
+            onClick={() => setAnalysisMode("flowRegimes")}
+          >
+            Flow Regime Analysis
+          </button>
         </div>
       </div>
 
-      {calculatedParams && (
-        <div className="results-panel">
-          <h3>Calculated Reservoir Parameters</h3>
-          <div className="results-grid">
-            <div className="result-item">
-              <span className="result-label">Stabilization:</span>
-              <span className="result-value">
-                {calculatedParams.stabilization.toFixed(2)} psi
-              </span>
+      {analysisMode === "parameters" ? (
+        <>
+          <div className="selection-mode">
+            <p>
+              <strong>Current Action:</strong> {getSelectionModeText()}
+            </p>
+          </div>
+
+          <div className="point-selection-controls">
+            <div className="point-inputs-container">
+              <div className="point-input-group">
+                <h3>Stabilization Line Points</h3>
+                <div className="point-inputs">
+                  <div className="point-input">
+                    <label>Point 1:</label>
+                    <div className="coord-inputs">
+                      <input
+                        type="number"
+                        name="x2_1"
+                        value={pointInputs.x2_1}
+                        onChange={handleInputChange}
+                        placeholder="x2_1"
+                        step="any"
+                      />
+                      <input
+                        type="number"
+                        name="y2_1"
+                        value={pointInputs.y2_1}
+                        onChange={handleInputChange}
+                        placeholder="y2_1"
+                        step="any"
+                      />
+                    </div>
+                  </div>
+                  <div className="point-input">
+                    <label>Point 2:</label>
+                    <div className="coord-inputs">
+                      <input
+                        type="number"
+                        name="x2_2"
+                        value={pointInputs.x2_2}
+                        onChange={handleInputChange}
+                        placeholder="x2_2"
+                        step="any"
+                      />
+                      <input
+                        type="number"
+                        name="y2_2"
+                        value={pointInputs.y2_2}
+                        onChange={handleInputChange}
+                        placeholder="y2_2"
+                        step="any"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="point-input-group">
+                <h3>Skin Factor Point</h3>
+                <div className="point-inputs">
+                  <div className="point-input">
+                    <label>Point:</label>
+                    <div className="coord-inputs">
+                      <input
+                        type="number"
+                        name="x3"
+                        value={pointInputs.x3}
+                        onChange={handleInputChange}
+                        placeholder="x3"
+                        step="any"
+                      />
+                      <input
+                        type="number"
+                        name="y3"
+                        value={pointInputs.y3}
+                        onChange={handleInputChange}
+                        placeholder="y3"
+                        step="any"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="point-input-group">
+                <h3>Wellbore Storage Point</h3>
+                <div className="point-inputs">
+                  <div className="point-input">
+                    <label>Point:</label>
+                    <div className="coord-inputs">
+                      <input
+                        type="number"
+                        name="x4"
+                        value={pointInputs.x4}
+                        onChange={handleInputChange}
+                        placeholder="x4"
+                        step="any"
+                      />
+                      <input
+                        type="number"
+                        name="y4"
+                        value={pointInputs.y4}
+                        onChange={handleInputChange}
+                        placeholder="y4"
+                        step="any"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="result-item">
-              <span className="result-label">Permeability:</span>
-              <span className="result-value">
-                {calculatedParams.permeability.toFixed(2)} mD
-              </span>
+
+            <div className="action-buttons">
+              <button
+                onClick={handleCalculateParameters}
+                disabled={selectionMode !== "complete"}
+              >
+                Calculate Parameters
+              </button>
+              <button onClick={resetSelection}>Reset Selection</button>
             </div>
-            <div className="result-item">
-              <span className="result-label">Skin Factor:</span>
-              <span className="result-value">
-                {calculatedParams.skin.toFixed(2)}
-              </span>
+          </div>
+
+          {calculatedParams && (
+            <div className="results-panel">
+              <h3>Calculated Reservoir Parameters</h3>
+              <div className="results-grid">
+                <div className="result-item">
+                  <span className="result-label">Stabilization:</span>
+                  <span className="result-value">
+                    {calculatedParams.stabilization.toFixed(2)} psi
+                  </span>
+                </div>
+                <div className="result-item">
+                  <span className="result-label">Permeability:</span>
+                  <span className="result-value">
+                    {calculatedParams.permeability.toFixed(2)} mD
+                  </span>
+                </div>
+                <div className="result-item">
+                  <span className="result-label">Skin Factor:</span>
+                  <span className="result-value">
+                    {calculatedParams.skin.toFixed(2)}
+                  </span>
+                </div>
+                <div className="result-item">
+                  <span className="result-label">Wellbore Storage:</span>
+                  <span className="result-value">
+                    {calculatedParams.wellbore_storage.toFixed(4)} bbl/psi
+                  </span>
+                </div>
+              </div>
             </div>
-            <div className="result-item">
-              <span className="result-label">Wellbore Storage:</span>
-              <span className="result-value">
-                {calculatedParams.wellbore_storage.toFixed(4)} bbl/psi
-              </span>
-            </div>
+          )}
+        </>
+      ) : (
+        <div className="flow-regime-analysis">
+          <div className="flow-regime-description">
+            <p>
+              Use reference lines with predefined slopes to identify flow
+              regimes. Drag any line to position it on the plot while
+              maintaining its slope.
+            </p>
+          </div>
+
+          <SlopeLines chartInstance={chartInstance} chartData={chartData} />
+
+          <div className="chart-controls">
+            <button onClick={resetZoom}>Reset Zoom</button>
           </div>
         </div>
       )}
 
-      <DiagnosticScatterPlot
-        chartData={chartData}
-        chartOptions={chartOptions}
-        onChartInit={onChartInit}
-      />
+      <div className="chart-container">
+        <DiagnosticScatterPlot
+          chartData={chartData}
+          chartOptions={chartOptions}
+          onChartInit={onChartInit}
+        />
+      </div>
     </div>
   );
 };

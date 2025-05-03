@@ -1,0 +1,164 @@
+/* SlopeLines Component Styling */
+.slope-lines-panel {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.slope-lines-toolbar {
+  display: flex;
+  align-items: center;
+  background-color: #f9f9f9;
+  padding: 10px 15px;
+  border-radius: 8px 8px 0 0;
+  border: 1px solid #ddd;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.toolbar-title {
+  font-weight: 600;
+  margin-right: 15px;
+  color: #333;
+  white-space: nowrap;
+  margin-bottom: 5px;
+}
+
+.toolbar-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.toolbar-button {
+  padding: 6px 12px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+
+.toolbar-button:hover {
+  background-color: #f0f8ff;
+  border-color: #4a90e2;
+}
+
+.toolbar-button.active {
+  background-color: #e6f0ff;
+  border-color: #4a90e2;
+  font-weight: 500;
+}
+
+.reference-lines {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.reference-line-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+.color-swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.custom-line-form {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  margin-bottom: 15px;
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.form-actions button {
+  padding: 8px 15px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.form-actions button:last-child {
+  background-color: #ccc;
+}
+
+.line-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.delete-button {
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  border: none;
+  color: white;
+  background-color: #e74c3c;
+}
+
+.line-instructions {
+  font-style: italic;
+  color: #666;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .reference-lines {
+    grid-template-columns: 1fr;
+  }
+  
+  .slope-lines-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .toolbar-title {
+    margin-bottom: 10px;
+  }
+}
