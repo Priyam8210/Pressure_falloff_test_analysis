@@ -12,6 +12,7 @@ import {
   Legend,
   LogarithmicScale,
 } from "chart.js";
+// import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import zoomPlugin from "chartjs-plugin-zoom";
 import "./App.css";
 
@@ -43,5 +44,19 @@ function App() {
     </Layout>
   );
 }
+
+// function App() {
+//   return (
+//     <BrowserRouter>
+//       <Layout>
+//         <Routes>
+//           <Route path="/" element={<Navigate to="/dashboard" />} />
+//           <Route path="/dashboard" element={<Dashboard />} />
+//           <Route path="/diagnostic-plot" element={<DiagnosticPlot />} />
+//         </Routes>
+//       </Layout>
+//     </BrowserRouter>
+//   );
+// }
 
 export default App;
